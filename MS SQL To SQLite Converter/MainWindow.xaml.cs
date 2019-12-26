@@ -39,6 +39,7 @@ namespace MS_SQL_To_SQLite_Converter {
                 updateStatus("SQLite db test connection failed.");
                 convert_now.IsEnabled = false;
                 convert_now_bw.IsEnabled = false;
+                updateStatus("Restart to retry.");
             }
         }
 
