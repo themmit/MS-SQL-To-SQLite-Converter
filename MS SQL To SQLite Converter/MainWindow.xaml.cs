@@ -38,6 +38,7 @@ namespace MS_SQL_To_SQLite_Converter {
             } catch (Exception) {
                 updateStatus("SQLite db test connection failed.");
                 convert_now.IsEnabled = false;
+                convert_now_bw.IsEnabled = false;
             }
         }
 
