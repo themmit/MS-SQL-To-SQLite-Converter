@@ -13,7 +13,14 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Content="Convert Now" Margin="5" Name="convert_now" Click="Button_Click" />
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Convert Now (Threading)" Margin="5" Name="convert_now" Click="Button_Click" />
+            <Button Grid.Column="1" Content="Convert Now (Background Worker)" Margin="5" Name="convert_now_bw" Click="Convert_now_bw_Click" />
+        </Grid>
         <ListBox x:Name="progress" Grid.Row="1" Margin="5"></ListBox>
     </Grid>
 </Window>

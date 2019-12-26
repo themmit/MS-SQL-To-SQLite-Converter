@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace MS_SQL_To_SQLite_Converter {
 
@@ -12,6 +12,8 @@ namespace MS_SQL_To_SQLite_Converter {
         SQLiteConnection con;
         DataTable dt;
         Thread test;
+        BackgroundWorker backgroundWorker;
+
         public MainWindow() {
             InitializeComponent();
         }
@@ -29,10 +31,22 @@ namespace MS_SQL_To_SQLite_Converter {
                 updateStatus("Click to start event.");
                 test = new Thread(new ThreadStart(Insmsg));
                 test.IsBackground = true;
+                backgroundWorker = new BackgroundWorker();
+                backgroundWorker.DoWork += BackgroundWorker_DoWork;
+                backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+                backgroundWorker.WorkerSupportsCancellation = true;
             } catch (Exception) {
                 updateStatus("SQLite db test connection failed.");
                 convert_now.IsEnabled = false;
             }
+        }
+
+        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            updateStatus("Completed - BackgroundWorker");
+        }
+
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
+            Insmsg();
         }
 
         public delegate void UpdateTextCallback(string message);
@@ -70,11 +84,17 @@ namespace MS_SQL_To_SQLite_Converter {
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             if (!test.IsAlive) {
-                updateStatus("Copy Paste Started");
+                updateStatus("Copy Paste Started - Threading");
                 test.Start();
             } else {
                 test.Abort();
                 progress.Items.Add("Aborted");
+            }
+        }
+
+        private void Convert_now_bw_Click(object sender, RoutedEventArgs e) {
+            if (!backgroundWorker.IsBusy) {
+                backgroundWorker.RunWorkerAsync();
             }
         }
     }
